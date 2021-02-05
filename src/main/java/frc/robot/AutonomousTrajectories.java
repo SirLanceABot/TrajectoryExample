@@ -100,28 +100,26 @@ case 3:
     //String trajectoryJSON = "C:\\Users\\RKT\\frc\\FRC2021\\Code\\Romi\\PathWeaver\\output\\1.wpilib.json"; //works
     //String trajectory1JSON = "Romi\\PathWeaver\\output\\1.wpilib.json"; // works
 
-    autoTrajectory = new Trajectory[1];
+    autoTrajectory = new Trajectory[2];
+
     String trajectory1JSON = "1.wpilib.json";
     try {
       Path trajectory1Path = Filesystem.getDeployDirectory().toPath().resolve(trajectory1JSON);
-      
-      System.out.println(trajectory1Path);
-
       autoTrajectory[0] = TrajectoryUtil.fromPathweaverJson(trajectory1Path);
-      System.out.println(autoTrajectory[0]);
+      //System.out.println(autoTrajectory[0]);
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory 1: " + trajectory1JSON, ex.getStackTrace());
     }
 
-    // String trajectory2JSON = "C:\\Users\\RKT\\frc\\FRC2021\\Code\\Romi\\PathWeaver\\output\\2.wpilib.json"; // works
-    // //Trajectory exampleTrajectory2 = new Trajectory();
-    // try {
-    //   Path trajectory2Path = Filesystem.getDeployDirectory().toPath().resolve(trajectory2JSON);
-    //   autoTrajectory[1] = TrajectoryUtil.fromPathweaverJson(trajectory2Path);
-    //   System.out.println(autoTrajectory[1]);
-    // } catch (IOException ex) {
-    //   DriverStation.reportError("Unable to open trajectory 2: " + trajectory2JSON, ex.getStackTrace());
-    // }
+    String trajectory2JSON = "2.wpilib.json";
+    //Trajectory exampleTrajectory2 = new Trajectory();
+    try {
+      Path trajectory2Path = Filesystem.getDeployDirectory().toPath().resolve(trajectory2JSON);
+      autoTrajectory[1] = TrajectoryUtil.fromPathweaverJson(trajectory2Path);
+      //System.out.println(autoTrajectory[1]);
+    } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory 2: " + trajectory2JSON, ex.getStackTrace());
+    }
 
  break;
 
