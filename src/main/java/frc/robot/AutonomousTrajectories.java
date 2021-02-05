@@ -91,16 +91,30 @@ case 2: //straight
 case 3:
 
 /*
-    Import trajectory
-    then splice in the RamseteCommand stuff
-    watch for REVERSE true/false.  may need to fix up
-    how to splice together path 1 and path 2
-    */
+The easiest way to combine multiple path segments xxx.wpilib.json is to concatenate them in an editor; in the correct order, of course.
+It's okay if the files are put on separate lines in the combined file.
+Remove all the "[" except for the first one.
+Replace all the "]" with a "," except for the last one.
+Put the combined file in the deploy folder.
+
+[first line is lots of stuff from first file]
+[second line is lots of stuff from second file]
+[third line is lots of stuff from third file]
+
+then remove all but the first "[" and change all but the last "]" to a ","
+
+[first line is lots of stuff from first file,
+second line is lots of stuff from second file,
+third line is lots of stuff from third file]
+
+Import trajectory
+
+*/
     //String trajectoryJSON = "paths/YourPath.wpilib.json";
     //String trajectoryJSON = "C:\\Users\\RKT\\frc\\FRC2021\\Code\\Romi\\PathWeaver\\output\\1.wpilib.json"; //works
     //String trajectory1JSON = "Romi\\PathWeaver\\output\\1.wpilib.json"; // works
 
-    autoTrajectory = new Trajectory[2];
+    autoTrajectory = new Trajectory[1];
 
     String trajectory1JSON = "1.wpilib.json";
     try {
@@ -111,15 +125,15 @@ case 3:
       DriverStation.reportError("Unable to open trajectory 1: " + trajectory1JSON, ex.getStackTrace());
     }
 
-    String trajectory2JSON = "2.wpilib.json";
-    //Trajectory exampleTrajectory2 = new Trajectory();
-    try {
-      Path trajectory2Path = Filesystem.getDeployDirectory().toPath().resolve(trajectory2JSON);
-      autoTrajectory[1] = TrajectoryUtil.fromPathweaverJson(trajectory2Path);
-      //System.out.println(autoTrajectory[1]);
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory 2: " + trajectory2JSON, ex.getStackTrace());
-    }
+    // String trajectory2JSON = "2.wpilib.json";
+    // //Trajectory exampleTrajectory2 = new Trajectory();
+    // try {
+    //   Path trajectory2Path = Filesystem.getDeployDirectory().toPath().resolve(trajectory2JSON);
+    //   autoTrajectory[1] = TrajectoryUtil.fromPathweaverJson(trajectory2Path);
+    //   //System.out.println(autoTrajectory[1]);
+    // } catch (IOException ex) {
+    //   DriverStation.reportError("Unable to open trajectory 2: " + trajectory2JSON, ex.getStackTrace());
+    // }
 
  break;
 
