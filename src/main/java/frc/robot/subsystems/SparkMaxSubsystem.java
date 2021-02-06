@@ -1,3 +1,5 @@
+/////////// SPARKMAX CAN MOTOR CONTROLLER SUBSYSTEM ////////////
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -70,9 +72,6 @@ public class SparkMaxSubsystem extends SubsystemBase {
       frontRightMotor.restoreFactoryDefaults();
       frontLeftMotor.restoreFactoryDefaults();
 
-      frontRightMotor.setCANTimeout(5000);
-      frontLeftMotor.setCANTimeout(5000);
-
       frontRightMotor.setInverted(true); // right motor mounted mirror image - inverted - from the left
 
       frontRightMotor.setSmartCurrentLimit(MotorConstants.getMotorStallCurrent(MotorConstants.Constants.MotorType.kNeoMotor, 0.3));
@@ -108,9 +107,6 @@ public class SparkMaxSubsystem extends SubsystemBase {
 
       backRightMotor.restoreFactoryDefaults();
       backLeftMotor.restoreFactoryDefaults();
-      
-      backRightMotor.setCANTimeout(5000);
-      backLeftMotor.setCANTimeout(5000);
 
       backRightMotor.setInverted(true); // right motor mounted mirror image - inverted - from the left
 
@@ -150,11 +146,11 @@ public class SparkMaxSubsystem extends SubsystemBase {
       m_drive.setRightSideInverted(false); // be sure to invert the SparkMax, not here in the differential drive
 
       // ENCODER SETUP
-      m_encoderRight.setVelocityConversionFactor(1./15./60.); // from RPM to meters/second
-      m_encoderLeft.setVelocityConversionFactor(1./15./60.);
+      m_encoderRight.setVelocityConversionFactor(Constants.ENCODER_METER_PER_REV/60.); // from RPM to distance/second
+      m_encoderLeft.setVelocityConversionFactor(Constants.ENCODER_METER_PER_REV/60.);
 
-      m_encoderRight.setPositionConversionFactor(1./15.); // from R to meters
-      m_encoderLeft.setPositionConversionFactor(1./15.);
+      m_encoderRight.setPositionConversionFactor(Constants.ENCODER_METER_PER_REV); // from R to distance
+      m_encoderLeft.setPositionConversionFactor(Constants.ENCODER_METER_PER_REV);
 
       m_odometry = new DifferentialDriveOdometry(Robot.m_gyro.gyroImpl.getRotation2d());
       
@@ -162,12 +158,9 @@ public class SparkMaxSubsystem extends SubsystemBase {
     }
 
     @Override
-  public void periodic() {
-    // validate - debugging
-    if(Robot.m_gyro.gyroImpl.getRotation2d() == null) {System.out.println("null"); System.out.println(Robot.m_gyro.gyroImpl.getRotation2d());}
-    
+  public void periodic() {  
     // Update the odometry in the periodic block
-    m_odometry.update(   // null ptr ?
+    m_odometry.update(
         Robot.m_gyro.gyroImpl.getRotation2d(), m_encoderLeft.getPosition(), m_encoderRight.getPosition());
     
     //System.out.println(this);
@@ -209,6 +202,7 @@ public class SparkMaxSubsystem extends SubsystemBase {
      */
     public void arcadeDrive(double fwd, double rot) {
         m_drive.arcadeDrive(fwd, rot);
+        //System.out.println("L R positions " + m_encoderLeft.getPosition() + " " + m_encoderRight.getPosition()); // debugging
     }
     
   /**
@@ -219,7 +213,7 @@ public class SparkMaxSubsystem extends SubsystemBase {
    */
     public void tankDriveVolts(double leftVolts, double rightVolts) {
 
-      System.out.println("tankDriveVolts L R " + leftVolts + " " + rightVolts);
+//      System.out.println("tankDriveVolts L R " + leftVolts + " " + rightVolts);
       
       if(front) {
       frontLeftMotor.setVoltage(leftVolts);
@@ -228,7 +222,7 @@ public class SparkMaxSubsystem extends SubsystemBase {
       else {
         backLeftMotor.setVoltage(leftVolts);
         backRightMotor.setVoltage(rightVolts);
-        System.out.println("back L R positions " + m_encoderLeft.getPosition() + " " + m_encoderRight.getPosition()); // debugging
+//        System.out.println("back L R positions " + m_encoderLeft.getPosition() + " " + m_encoderRight.getPosition()); // debugging
       }
 
       m_drive.feed();
@@ -517,11 +511,6 @@ public class SparkMaxSubsystem extends SubsystemBase {
     //constants class for this class
     public static class Constants
     {
-        public static enum OmniEncoder
-        {
-            kLeft, kRight, kBoth;
-        }
-
         public static final int FRONT_LEFT_MOTOR_PORT = 4;
         public static final int FRONT_RIGHT_MOTOR_PORT = 1;
         public static final int BACK_RIGHT_MOTOR_PORT = 2;
@@ -538,19 +527,14 @@ public class SparkMaxSubsystem extends SubsystemBase {
         public static final double STOPPING_SPEED = 0.175;
         public static final int ROTATE_THRESHOLD = 10;
 
-        public static final int LEFT_SERVO_PORT = 1;
-        public static final int RIGHT_SERVO_PORT = 0;
-
         public static final int LEFT_ENCODER_CHANNEL_A = 18;
         public static final int LEFT_ENCODER_CHANNEL_B = 16;
         public static final int RIGHT_ENCODER_CHANNEL_A = 14;
         public static final int RIGHT_ENCODER_CHANNEL_B = 15;
 
-        // 4096 ticks per motor revolution
-        public static final double ENCODER_TICKS_PER_INCH = (360.0 * 4.0) / (3.25 * Math.PI);
-        public static final double ENCODER_METER_PER_TICK = 1. / (18. * 4096.); // 18 rev/meter * 4096 ticks/rev
-        // convert velocity RPM to meters/second
-        // velocity/60/18
-        // 18 rev/meter
+        // 4096 ticks per motor revolution native NEO brushless
+        //public static final double ENCODER_TICKS_PER_INCH = (360.0 * 4.0) / (3.25 * Math.PI);
+        public static final double ENCODER_METER_PER_REV = 1./19.1; // approximately
+        public static final double ENCODER_METER_PER_TICK = ENCODER_METER_PER_REV/4096.;
     }
 }

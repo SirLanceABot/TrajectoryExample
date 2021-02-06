@@ -1,4 +1,4 @@
-//////////// NAVX GYRO INPUT ////////////
+//////////// NAVX GYRO SUBSYSTEM ////////////
 
 package frc.robot.subsystems;
 
@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation;
 import com.kauailabs.navx.frc.AHRS;
 //import com.kauailabs.navx.frc.AHRS.SerialDataType;
-
 
 public class Gyro4237 extends AHRS {
 
