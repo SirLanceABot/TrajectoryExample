@@ -1,5 +1,10 @@
 /////////// SPARKMAX CAN MOTOR CONTROLLER SUBSYSTEM ////////////
 
+// must manually set AVAILABLE MOTORS options of choices:
+// front no back, back no front, front and back with back the follower of the front
+
+// suggest adding potentially useful methods for drive a distance and turn an angle
+// some stuff at the bottom from another year may be some salvagable code
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -265,6 +270,74 @@ public class SparkMaxSubsystem extends SubsystemBase {
     m_drive.setMaxOutput(maxOutput);
   }
 
+    public String getFrontRightMotorData()
+    {
+        return String.format("%6.3f,  %6.0f,  %6.3f,  %5.1f",
+         frontRightMotor.get(), frontRightMotor.getEncoder().getPosition(),
+          frontRightMotor.getOutputCurrent(), frontRightMotor.getEncoder().getVelocity());
+    }
+
+    public String getFrontLeftMotorData()
+    {
+        return String.format("%6.3f,  %6.0f,  %6.3f,  %5.1f",
+         frontLeftMotor.get(), frontLeftMotor.getEncoder().getPosition(),
+         frontLeftMotor.getOutputCurrent(), frontLeftMotor.getEncoder().getVelocity());
+    }
+
+    public String getBackRightMotorData()
+    {
+        return String.format("%6.3f,  %6.0f,  %6.3f,  %5.1f",
+         backRightMotor.get(), backRightMotor.getEncoder().getPosition(),
+         backRightMotor.getOutputCurrent(), backRightMotor.getEncoder().getVelocity());
+    }
+
+    public String getBackLeftMotorData()
+    {
+        return String.format("%6.3f,  %6.0f,  %6.3f,  %5.1f",
+         backLeftMotor.get(), backLeftMotor.getEncoder().getPosition(),
+         backLeftMotor.getOutputCurrent(), backLeftMotor.getEncoder().getVelocity());
+    }
+
+    @Override
+    public String toString()
+    {
+        return
+            String.format("LV: %.2f, RV: %.2f LP: %.2f, RP %.2f Yaw: %.2f",
+              m_encoderLeft.getVelocity(), m_encoderRight.getVelocity(),
+              m_encoderLeft.getPosition(), m_encoderRight.getPosition(),
+              Robot.m_gyro.gyroImpl.getAngle());
+    }
+
+    //constants class for this class
+    public static class Constants
+    {
+        public static final int FRONT_LEFT_MOTOR_PORT = 4;
+        public static final int FRONT_RIGHT_MOTOR_PORT = 1;
+        public static final int BACK_RIGHT_MOTOR_PORT = 2;
+        public static final int BACK_LEFT_MOTOR_PORT = 3;
+
+        public static final int PRIMARY_MOTOR_CURRENT_LIMIT = 35;
+        public static final int SECONDARY_MOTOR_CURRENT_LIMIT = 45;
+
+        public static final double DRIVE_RAMP_TIME = 0.10;
+
+        public static final double MOTOR_DEADBAND = 0.01;
+
+        public static final double STARTING_SPEED = 0.3;
+        public static final double STOPPING_SPEED = 0.175;
+        public static final int ROTATE_THRESHOLD = 10;
+
+        public static final int LEFT_ENCODER_CHANNEL_A = 18;
+        public static final int LEFT_ENCODER_CHANNEL_B = 16;
+        public static final int RIGHT_ENCODER_CHANNEL_A = 14;
+        public static final int RIGHT_ENCODER_CHANNEL_B = 15;
+
+        // 4096 ticks per motor revolution native NEO brushless
+        //public static final double ENCODER_TICKS_PER_INCH = (360.0 * 4.0) / (3.25 * Math.PI);
+        public static final double ENCODER_METER_PER_REV = 1./19.1; // approximately
+        public static final double ENCODER_METER_PER_TICK = ENCODER_METER_PER_REV/4096.;
+    }
+}  
     // /**
     //  * Calculates the angle to rotate based on bearing and heading
     //  * @param bearing
@@ -469,72 +542,3 @@ public class SparkMaxSubsystem extends SubsystemBase {
 
     //     return doneSpinning;
     // }
-
-    public String getFrontRightMotorData()
-    {
-        return String.format("%6.3f,  %6.0f,  %6.3f,  %5.1f",
-         frontRightMotor.get(), frontRightMotor.getEncoder().getPosition(),
-          frontRightMotor.getOutputCurrent(), frontRightMotor.getEncoder().getVelocity());
-    }
-
-    public String getFrontLeftMotorData()
-    {
-        return String.format("%6.3f,  %6.0f,  %6.3f,  %5.1f",
-         frontLeftMotor.get(), frontLeftMotor.getEncoder().getPosition(),
-         frontLeftMotor.getOutputCurrent(), frontLeftMotor.getEncoder().getVelocity());
-    }
-
-    public String getBackRightMotorData()
-    {
-        return String.format("%6.3f,  %6.0f,  %6.3f,  %5.1f",
-         backRightMotor.get(), backRightMotor.getEncoder().getPosition(),
-         backRightMotor.getOutputCurrent(), backRightMotor.getEncoder().getVelocity());
-    }
-
-    public String getBackLeftMotorData()
-    {
-        return String.format("%6.3f,  %6.0f,  %6.3f,  %5.1f",
-         backLeftMotor.get(), backLeftMotor.getEncoder().getPosition(),
-         backLeftMotor.getOutputCurrent(), backLeftMotor.getEncoder().getVelocity());
-    }
-
-    @Override
-    public String toString()
-    {
-        return
-            String.format("LV: %.2f, RV: %.2f LP: %.2f, RP %.2f Yaw: %.2f",
-              m_encoderLeft.getVelocity(), m_encoderRight.getVelocity(),
-              m_encoderLeft.getPosition(), m_encoderRight.getPosition(),
-              Robot.m_gyro.gyroImpl.getAngle());
-    }
-
-    //constants class for this class
-    public static class Constants
-    {
-        public static final int FRONT_LEFT_MOTOR_PORT = 4;
-        public static final int FRONT_RIGHT_MOTOR_PORT = 1;
-        public static final int BACK_RIGHT_MOTOR_PORT = 2;
-        public static final int BACK_LEFT_MOTOR_PORT = 3;
-
-        public static final int PRIMARY_MOTOR_CURRENT_LIMIT = 35;
-        public static final int SECONDARY_MOTOR_CURRENT_LIMIT = 45;
-
-        public static final double DRIVE_RAMP_TIME = 0.10;
-
-        public static final double MOTOR_DEADBAND = 0.01;
-
-        public static final double STARTING_SPEED = 0.3;
-        public static final double STOPPING_SPEED = 0.175;
-        public static final int ROTATE_THRESHOLD = 10;
-
-        public static final int LEFT_ENCODER_CHANNEL_A = 18;
-        public static final int LEFT_ENCODER_CHANNEL_B = 16;
-        public static final int RIGHT_ENCODER_CHANNEL_A = 14;
-        public static final int RIGHT_ENCODER_CHANNEL_B = 15;
-
-        // 4096 ticks per motor revolution native NEO brushless
-        //public static final double ENCODER_TICKS_PER_INCH = (360.0 * 4.0) / (3.25 * Math.PI);
-        public static final double ENCODER_METER_PER_REV = 1./19.1; // approximately
-        public static final double ENCODER_METER_PER_TICK = ENCODER_METER_PER_REV/4096.;
-    }
-}

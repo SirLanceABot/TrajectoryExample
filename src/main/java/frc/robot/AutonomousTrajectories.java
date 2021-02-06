@@ -91,17 +91,21 @@ case 2: //straight
 case 3:
 
 /*
-The easiest way to combine multiple path segments xxx.wpilib.json is to concatenate them in an editor; in the correct order, of course.
+The easiest way to combine multiple path segments in files xxx.wpilib.json is to
+concatenate them in an editor; in the correct order, of course.
+
 It's okay if the files are put on separate lines in the combined file.
+
 Remove all the "[" except for the first one.
 Replace all the "]" with a "," except for the last one.
 Put the combined file in the deploy folder.
 
+Put all the file content together in one file:
 [first line is lots of stuff from first file]
 [second line is lots of stuff from second file]
 [third line is lots of stuff from third file]
 
-then remove all but the first "[" and change all but the last "]" to a ","
+Then remove all but the first "[" and change all but the last "]" to a ","
 
 [first line is lots of stuff from first file,
 second line is lots of stuff from second file,
@@ -115,7 +119,9 @@ Import trajectory
     //String trajectory1JSON = "Romi\\PathWeaver\\output\\1.wpilib.json"; // works
 
     autoTrajectory = new Trajectory[1];
-
+    
+    // the robot file in its deploy directory
+    // put the file in this project's deploy directory and it will be uploaded automatically
     String trajectory1JSON = "1.wpilib.json";
     try {
       Path trajectory1Path = Filesystem.getDeployDirectory().toPath().resolve(trajectory1JSON);
@@ -137,7 +143,7 @@ Import trajectory
 
  break;
 
-case 4:
+case 4: // straight line 2 segments example
     autoTrajectory = new Trajectory[2];
 
     autoTrajectory[0] =
@@ -162,7 +168,7 @@ case 4:
 
  break;
 
-default:
+ default:
     autoTrajectory = null;
  break;
 }
@@ -196,11 +202,10 @@ for(int idx = 0; idx < autoTrajectory.length; idx++) {
 
    else // last trajectory is special to stop motors; could make another command to do that but maybe this is better - faster; less overrun?
       addCommands(ramseteCommand[idx].andThen(() -> m_robotDrive.stopAllMotors( )));
- }
+}
 
 // Reset odometry to the starting pose of the trajectory.
 m_robotDrive.resetOdometry(autoTrajectory[0].getInitialPose());
-
 }
 
 }

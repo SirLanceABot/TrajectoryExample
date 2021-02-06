@@ -1,5 +1,12 @@
 //////////// NAVX GYRO SUBSYSTEM ////////////
 
+// the NavX software (class AHRS) provides a complete source of information
+// that no new methods are here except a couple of display values methods
+// handy for debugging
+
+// checking for AHRS instantiation and calibration down time used in past years
+// could be added here
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
