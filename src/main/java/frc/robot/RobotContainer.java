@@ -94,7 +94,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-// all this commented out stuff moved to its own file
+// all this commented out stuff moved to its own file and made to work right
+// junk still here for reference by rkt
 
 //     // Create a voltage constraint to ensure we don't accelerate too fast
 //     var autoVoltageConstraint =

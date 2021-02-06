@@ -1,4 +1,4 @@
-// command I thought might be useful instead of in-lining it but decided not to use it at all
+// command I thought might be useful instead of in-lining it but decided reset odometry wasn't needed anywhere
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
